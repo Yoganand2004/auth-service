@@ -24,7 +24,8 @@ const LoginValidation =(req,res,next)=>{
     if(error){
         return res.status(400).
         json({
-             "message ": "Bad Request",error
+             "message ": "Bad Request"
+             ,error
         })
     }
     next();

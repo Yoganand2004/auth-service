@@ -29,10 +29,10 @@ const signup =async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+const  login = async (req, res) => {
   try{
     const {email,password} = req.body
-    const user =await userSchema.findOne({email});
+    const user =await UserSchema.findOne({email});
     if(!user){
       return res.status(404).json({
         "Message": "User Not Found"
@@ -49,9 +49,11 @@ const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+    res.cookie("token",token,)
 
     res.status(200).json({
       message: "Login successful",
+      "name": user.name,
       token,
     });
 
