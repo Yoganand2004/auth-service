@@ -45,11 +45,16 @@ const  login = async (req, res) => {
       });
     }
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email},
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.cookie("token",token,)
+    res.cookie("token",token,{
+      httpOnly: false,   // JS can't read it
+    secure: false,     // HTTPS only
+    sameSite: 'Lax',
+    maxAge: 3600000 
+    })
 
     res.status(200).json({
       message: "Login successful",
@@ -68,4 +73,15 @@ const  login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+const logout = async (req,res) =>{
+  res.clearCookie("token" , {
+    httpOnly: true,
+    secure: false,
+    sameSite: "Lax",
+  })
+  res.status(200).json({
+    message: "Logged out successfully"
+  });
+};
+
+module.exports = { signup, login ,logout};
