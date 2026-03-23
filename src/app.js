@@ -13,7 +13,8 @@ const productRouter =require('./Routes/ProductRouter')
 
 const AuthRouter = require("./Routes/AuthRouter")
 
-app.use(cors({
+app.use(
+  cors({
   origin: "http://localhost:5173",
   credentials: true
 }));
@@ -23,7 +24,6 @@ require("./config/db")
 app.get("/",async (req,res)=>{
     return res.send('Hello World')
 })
-app.use(express.json());   
 connectDB(); 
 app.use('/auth',AuthRouter)
 app.use('/products',productRouter) 
