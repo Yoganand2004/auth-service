@@ -1,34 +1,24 @@
 {
+  "name": "check1",
+  "version": "1.0.0",
+  "description": "WebSocket backend",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^4.22.1",
-    "it": "^1.1.1",
     "joi": "^18.0.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
-    "nodemon": "^3.1.14",
-    "react-router-dom": "^7.13.1",
-    "react-toastify": "^11.0.5",
-    "socket.io": "^4.8.3",
-    "websocket": "^1.0.35",
-    "ws": "^8.19.0"
+    "socket.io": "^4.8.3"
   },
-  "name": "check1",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "devDependencies": {
-    "coffee-script": "^1.3.3"
-  },
-  "scripts": {
-    "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "engines": {
+    "node": ">=18"
+  }
 }
