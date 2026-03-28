@@ -13,9 +13,20 @@ const productRouter =require('./Routes/ProductRouter')
 
 const AuthRouter = require("./Routes/AuthRouter")
 
-app.use(
-  cors({
-  origin: "http://localhost:5173",
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://writex-frontend.vercel.app",
+  "https://dekhoyoga.in"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
