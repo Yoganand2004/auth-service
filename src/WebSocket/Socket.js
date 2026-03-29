@@ -7,7 +7,6 @@ const socketHandler = (io) => {
     socket.currentRoom = null;
 
     socket.on("join-port", (roomId) => {
-      // ✅ FIX: use socket.currentRoom
       if (socket.currentRoom) {
         socket.leave(socket.currentRoom);
       }
@@ -25,24 +24,39 @@ const socketHandler = (io) => {
       socket.to(roomId).emit("receive-text", text);
     });
 
-    socket.on("leave-port", (portId) => {
-      socket.leave(portId);
+    socket.on("leave-port", (roomId) => {
+      socket.leave(roomId);
 
-      // clear only this user's UI
-      socket.emit("receive-text", "");
+      // check if room is empty
+      const room = io.sockets.adapter.rooms.get(roomId);
+
+      if (!room || room.size === 0) {
+        delete rooms[roomId]; // ✅ remove room completely
+      }
 
       socket.currentRoom = null;
+      socket.emit("receive-text", "");
     });
 
-    socket.on("clear-room", (portId) => {
-      rooms[portId] = "";
-
-      // ✅ FIX: send to everyone including sender
-      io.to(portId).emit("receive-text", "");
+    socket.on("clear-room", (roomId) => {
+      rooms[roomId] = "";
+      io.to(roomId).emit("receive-text", "");
     });
 
     socket.on("disconnect", () => {
       console.log("User disconnected", socket.id);
+
+      const roomId = socket.currentRoom;
+
+      if (roomId) {
+        const room = io.sockets.adapter.rooms.get(roomId);
+
+        // after disconnect, check if anyone is left
+        if (!room || room.size === 0) {
+          delete rooms[roomId]; // ✅ clear text when last user leaves
+          console.log(`Room ${roomId} cleared`);
+        }
+      }
     });
   });
 };
