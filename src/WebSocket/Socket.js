@@ -1,10 +1,12 @@
-let currentroom = null
+
+
 let rooms  ={}
 
 const socketHandler = (io) => {
 
 io.on("connection", (socket) => {
   console.log("User connected",socket.id);
+  socket.currentRoom = null;
 
   socket.on("join-port", (roomId) => {
     if(currentroom){
@@ -23,15 +25,18 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("receive-text",text)
   })
   socket.on("leave-port", (portId) => {
-    rooms[portId] = "";                          
-  socket.to(portId).emit("receive-text", ""); 
-
   socket.leave(portId);
+  socket.emit("receive-text", "");
+  socket.currentRoom = null;
+
 });
 socket.on("clear-room", (portId) => {
   rooms[portId] = "";                          
   socket.to(portId).emit("receive-text", ""); 
 });
+socket.on("disconnect", () => {
+      console.log("User disconnected", socket.id);
+    });
 
 });
 
