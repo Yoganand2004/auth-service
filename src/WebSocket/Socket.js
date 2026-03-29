@@ -23,6 +23,9 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("receive-text",text)
   })
   socket.on("leave-port", (portId) => {
+    rooms[portId] = "";                          
+  socket.to(portId).emit("receive-text", ""); 
+
   socket.leave(portId);
 });
 socket.on("clear-room", (portId) => {
